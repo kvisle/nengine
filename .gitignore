@@ -4,7 +4,6 @@ nengine
 Makefile
 *.a
 .deps
-config.h
 config.log
 config.status
 autom4te.cache
