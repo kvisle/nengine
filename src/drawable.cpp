@@ -1,0 +1,33 @@
+#include "drawable.h"
+
+#include "game.h"
+#include "image.h"
+#include "resourcemanager.h"
+
+drawable::drawable(game *game, int x, int y, int z, std::string texture)
+{
+    g = game;
+
+    this->x = x;
+    this->y = y;
+    this->z = z;
+
+    tex = g->rm->getImage(texture);
+}
+
+drawable::~drawable()
+{
+
+}
+
+void
+drawable::render()
+{
+
+}
+
+void
+drawable::update()
+{
+
+}
