@@ -23,6 +23,7 @@ AC_PROG_LN_S
 PKG_CHECK_MODULES([GL],[gl])
 PKG_CHECK_MODULES([SDL],[sdl])
 PKG_CHECK_MODULES([OPENAL],[openal])
+PKG_CHECK_MODULES([GLEW],[glew])
 
 AC_CHECK_LIB([GL], [main])
 # FIXME: Replace `main' with a function in `-lm':
@@ -41,6 +42,5 @@ AC_CONFIG_FILES([Makefile
 				 src/Makefile
                  lib/Makefile
                  lib/stb_image/Makefile
-				 lib/glew/Makefile
                  lib/lib_json/Makefile])
 AC_OUTPUT
