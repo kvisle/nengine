@@ -1,6 +1,5 @@
 nengine
 *.o
-*.am
 *.in
 Makefile
 *.a
