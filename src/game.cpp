@@ -11,6 +11,7 @@
 #include "tileset.h"
 #include "tilemap.h"
 #include "resource.h"
+#include "font.h"
 
 game::game()
 {
@@ -18,6 +19,7 @@ game::game()
 
     r = new renderer(960, 640);
     rm = new resourcemanager(this);
+    f = new font(rm->getImage("charmap1.png"), this, 8, 8);
 
     c.x = 0;
     c.y = 0;
@@ -32,6 +34,7 @@ game::~game()
 {
     delete(rm);
     delete(r);
+    delete(f);
 }
 
 void
@@ -39,10 +42,14 @@ game::render()
 {
     r->clear();
 
-    for (uint32_t i=0; i < assets.size(); i++)
+    f->drawString("dette er\nen test", 0, 0);
+
+/*    for (uint32_t i=0; i < assets.size(); i++)
     {
         assets[i]->render();
-    }
+    }*/
+
+
 
     r->swap();
 }

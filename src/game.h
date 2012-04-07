@@ -9,6 +9,7 @@ class renderer;
 class resourcemanager;
 class image;
 class drawable;
+class font;
 
 class game {
     public:
@@ -22,7 +23,7 @@ class game {
         resourcemanager *rm;
 
         camera c;
-
+        font *f;
 
     private:
         std::vector<drawable*> assets;
