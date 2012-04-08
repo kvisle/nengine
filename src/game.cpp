@@ -19,7 +19,7 @@ game::game()
 
     r = new renderer(960, 640);
     rm = new resourcemanager(this);
-    f = new font(rm->getImage("charmap1.png"), this, 8, 8);
+    f = new font(rm->getImage("charmap1.png"), this, 16, 16);
 
     c.x = 0;
     c.y = 0;
@@ -42,7 +42,7 @@ game::render()
 {
     r->clear();
 
-    f->drawString("dette er\nen test", 0, 0);
+    f->drawString("\\ff0000ff\\red\n\\00ff00ff\\green\n\\0000ffff\\blue", 0, 0);
 
 /*    for (uint32_t i=0; i < assets.size(); i++)
     {

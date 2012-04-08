@@ -11,7 +11,7 @@
 #include "glm/gtc/type_ptr.hpp"
 
 struct vertex2f {
-    float x, y, s, t;
+    float x, y, s, t, r, g, b, a;
 };
 
 class shader;
@@ -24,6 +24,10 @@ class renderer {
         void addQuad(GLuint tex, 
                      float x, float y, float w, float h,
                      float tx, float ty, float tw, float th);
+        void addQuad(GLuint tex,
+                     float x, float y, float w, float h,
+                     float tx, float ty, float tw, float th,
+                     float r, float g, float b, float a);
         void flush_queue();
         void swap();
         void clear();

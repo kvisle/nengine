@@ -36,9 +36,18 @@ renderer::~renderer()
 }
 
 void
+renderer::addQuad(GLuint qtex,
+                   float x, float y, float w, float h,
+                   float tx, float ty, float tw, float th)
+{
+    addQuad(qtex, x, y, w, h, tx, ty, tw, th, 1, 1, 1, 1);
+}
+
+void
 renderer::addQuad(GLuint qtex, 
                    float x, float y, float w, float h, 
-                   float tx, float ty, float tw, float th)
+                   float tx, float ty, float tw, float th,
+                   float r, float g, float b, float a)
 {
     if ( qtex != tex )
     {
@@ -47,7 +56,13 @@ renderer::addQuad(GLuint qtex,
     }
 
     vertex2f v;
-    
+
+    // Colors
+    v.r = r;
+    v.g = g;
+    v.b = b;
+    v.a = a;
+
     // Topleft
     v.x = x;
     v.y = y;
@@ -114,6 +129,9 @@ renderer::flush_queue()
 
     glVertexAttribPointer (s->attribLocation("aTextureCoord"), 2, GL_FLOAT, GL_FALSE, sizeof(vertex2f), (void *) (2 * sizeof (float)));
     glEnableVertexAttribArray (s->attribLocation("aTextureCoord"));
+
+    glVertexAttribPointer (s->attribLocation("aColor"), 4, GL_FLOAT, GL_FALSE, sizeof(vertex2f), (void *) (4 * sizeof (float)));
+    glEnableVertexAttribArray (s->attribLocation("aColor"));
 
     glDrawArrays (GL_TRIANGLES, 0, queue.size());
 
