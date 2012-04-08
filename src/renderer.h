@@ -11,7 +11,7 @@
 #include "glm/gtc/type_ptr.hpp"
 
 struct vertex2f {
-    float x, y, s, t, r, g, b, a;
+    float x, y, s, t, r, g, b, a, tu;
 };
 
 class shader;
@@ -21,10 +21,12 @@ class renderer {
         renderer(float w, float h);
         ~renderer();
 
+        void addOpQuad(float x, float y, float w, float h,
+                       float r, float g, float b, float a);
         void addQuad(GLuint tex, 
                      float x, float y, float w, float h,
                      float tx, float ty, float tw, float th);
-        void addQuad(GLuint tex,
+        void addQuad(GLuint tex, float useTex,
                      float x, float y, float w, float h,
                      float tx, float ty, float tw, float th,
                      float r, float g, float b, float a);

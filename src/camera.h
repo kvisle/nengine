@@ -3,7 +3,7 @@
 
 class camera {
     public:
-        float x, y;
+        float x, y, w, h;
 };
 
 #endif /* __CAMERA_H__ */

@@ -13,6 +13,8 @@ class drawable {
 
         virtual void render();
         virtual void update();
+        virtual int collidesWith(float x, float y, float w, float h, drawable *other);
+
 
         game *g;
         int x, y, z;

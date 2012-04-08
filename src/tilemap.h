@@ -9,14 +9,19 @@
 
 class tileset;
 class game;
+class image;
 
 class tilemap : public drawable {
     public:
         tilemap(game *g, std::string t, Json::Value json);
+        tilemap(game *g, image *i, std::string t, std::string tileset);
+
         ~tilemap();
 
         virtual void render();
         virtual void update();
+
+        virtual int collidesWith(float x, float y, float w, float h, drawable *other);
 
         int w, h;
         int tw, th;

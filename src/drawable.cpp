@@ -31,3 +31,10 @@ drawable::update()
 {
 
 }
+
+int
+drawable::collidesWith(float x, float y, float w, float h, drawable *other)
+{
+
+    return 0;
+}

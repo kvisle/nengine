@@ -13,10 +13,11 @@ class tile : public drawable {
 
         void setIndex(int x);
         int index;
+        int bits;
 
     private:
 //        int index;
-        int bits;
+//        int bits;
         int interval;
         int frames_n;
         int frames[64];

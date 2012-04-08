@@ -61,7 +61,7 @@ font::drawString(std::string str, float x, float y)
         }
         else
         {
-            this->g->r->addQuad(tex->getTexture(),
+            this->g->r->addQuad(tex->getTexture(), 1.0,
                           xp, yp, w, h,
                           (str[i] % 16) * ts, (str[i] / 16) * ts, ts, ts,
                           r, g, b, a);

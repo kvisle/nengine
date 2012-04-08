@@ -88,6 +88,7 @@ shader::link(GLuint vid, GLuint fid)
     glBindAttribLocation (program, 0, "aVertexPosition");
     glBindAttribLocation (program, 1, "aTextureCoord");
     glBindAttribLocation (program, 2, "aColor");
+    glBindAttribLocation (program, 3, "useTex");
 
     if (!status)
     {

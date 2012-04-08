@@ -16,6 +16,8 @@ tile::tile(game *g, std::string tex, int x, int b, int i, int fc, int f[64], int
     frame = 0;
     n = 0;
 
+    printf("TILE: %d, bits: %d\n", index, bits);
+
     this->tw = tw;
     this->th = th;
 

@@ -5,7 +5,7 @@
 #include <GL/gl.h>
 
 #include "game.h"
-
+#include "input.h"
 
 int main(int argc, char *argv[])
 {
@@ -37,6 +37,8 @@ int main(int argc, char *argv[])
             case SDL_QUIT:
                 done++;
                 break;
+            case SDL_KEYDOWN: g.in->keys[e.key.keysym.sym] = 1; break;
+            case SDL_KEYUP:   g.in->keys[e.key.keysym.sym] = 0; break;
             }
         }
 
