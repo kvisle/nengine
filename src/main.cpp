@@ -11,6 +11,8 @@ int main(int argc, char *argv[])
 {
     int done = 0;
 
+
+    freopen("stdout.txt","w",stdout);
     if (SDL_Init (SDL_INIT_VIDEO) != 0)
     {
         std::cerr << "Unable to initialize SDL:" << SDL_GetError () << std::endl;
