@@ -32,7 +32,7 @@ game::game()
 
     assets.push_back(new tilemap(this, rm->getImage("tilemap.png"), "tileset2.png", "tileset2.json"));
 
-    assets.push_back(new megaman(this, 20, 20, 20));
+    assets.push_back(new megaman(this, 64, 64, 0));
 //    assets.push_back(new sprite(this, 20, 20, 20, "megaman.png", resource("sprite.json").getJson()));
 //    assets.push_back(new tilemap(this, "tileset.png", resource("tilemap.json").getJson()));
 //    tileset foo(this, "tileset.png", resource("tileset.json").getJson());
@@ -58,8 +58,7 @@ game::render()
         assets[i]->render();
     }
 
-
-    f->drawString("\\ff0000ff\\foo", 0, 0);
+    f->drawString("\\ffe680ff\\trygve is testing", 0, 0);
 
     r->swap();
 }

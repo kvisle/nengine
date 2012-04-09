@@ -39,7 +39,7 @@ void
 renderer::addOpQuad(float x, float y, float w, float h,
                     float r, float g, float b, float a)
 {
-    addQuad(tex, 0.0, x, y, w, h, 0.0, 0.0, 0.0, 0.0, r, g, b, a);
+    addQuad(tex, 0.0, x, y, w, h, 0.0, 0.0, 0.0, 0.0, r, g, b, a, 0, 0);
 }
 
 void
@@ -47,14 +47,24 @@ renderer::addQuad(GLuint qtex,
                    float x, float y, float w, float h,
                    float tx, float ty, float tw, float th)
 {
-    addQuad(qtex, 1.0, x, y, w, h, tx, ty, tw, th, 1, 1, 1, 1);
+    addQuad(qtex, 1.0, x, y, w, h, tx, ty, tw, th, 1, 1, 1, 1, 0, 0);
+}
+
+void
+renderer::addQuad(GLuint qtex, float usetex,
+                   float x, float y, float w, float h,
+                   float tx, float ty, float tw, float th,
+                   float r, float g, float b, float a)
+{
+    addQuad(qtex, usetex, x, y, w, h, tx, ty, tw, th, r, g, b, a, 0, 0);
 }
 
 void
 renderer::addQuad(GLuint qtex, float usetex,
                    float x, float y, float w, float h, 
                    float tx, float ty, float tw, float th,
-                   float r, float g, float b, float a)
+                   float r, float g, float b, float a,
+                   int flip_x, int flip_y)
 {
     if ( qtex != tex )
     {
@@ -76,43 +86,43 @@ renderer::addQuad(GLuint qtex, float usetex,
     // Topleft
     v.x = x;
     v.y = y;
-    v.s = tx;
-    v.t = ty;
+    v.s = flip_x ? tx+tw : tx;
+    v.t = flip_y ? ty+th : ty;
     queue.push_back(v);
 
     // Topright
     v.x = x+w;
     v.y = y;
-    v.s = tx+tw;
-    v.t = ty;
+    v.s = flip_x ? tx : tx+tw;
+    v.t = flip_y ? ty+th : ty;
     queue.push_back(v);
 
     // Bottomleft
     v.x = x;
     v.y = y+h;
-    v.s = tx;
-    v.t = ty+th;
+    v.s = flip_x ? tx+tw : tx;
+    v.t = flip_y ? ty : ty+th;
     queue.push_back(v);
 
     // Topright
     v.x = x+w;
     v.y = y;
-    v.s = tx+tw;
-    v.t = ty;
+    v.s = flip_x ? tx : tx+tw;
+    v.t = flip_y ? ty+th : ty;
     queue.push_back(v);
 
     // Bottomleft
     v.x = x;
     v.y = y+h;
-    v.s = tx;
-    v.t = ty+th;
+    v.s = flip_x ? tx+tw : tx;
+    v.t = flip_y ? ty : ty+th;
     queue.push_back(v);
 
     // Bottomright
     v.x = x+w;
     v.y = y+h;
-    v.s = tx+tw;
-    v.t = ty+th;
+    v.s = flip_x ? tx : tx+tw;
+    v.t = flip_y ? ty : ty+th;
     queue.push_back(v);
 }
 

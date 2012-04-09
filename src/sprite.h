@@ -50,6 +50,8 @@ class sprite : public drawable {
 
         int frame, intcount, animation;
 
+        int flip_x, flip_y;
+
     private:
         std::vector<struct box> boxes;
         std::vector<struct animation> animations;

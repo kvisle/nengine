@@ -19,13 +19,15 @@ int main(int argc, char *argv[])
     }
 
 
-    SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
+//    SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1);
     SDL_GL_SetAttribute (SDL_GL_DOUBLEBUFFER, 1);
     SDL_Surface *s = SDL_SetVideoMode(960, 640, 24, SDL_OPENGL);
 
     glViewport (0, 0, 960, 640);
 
     game g;
+
+    int ld = 0;
 
     while (!done)
     {
@@ -44,6 +46,11 @@ int main(int argc, char *argv[])
 
         g.update();
         g.render();
+
+        int t = (1000/60)-(SDL_GetTicks()-ld);
+        if ( t > 0 && t < 1000 ) SDL_Delay(t);
+        ld = SDL_GetTicks();
+
     }
 
     return 0;

@@ -30,6 +30,11 @@ class renderer {
                      float x, float y, float w, float h,
                      float tx, float ty, float tw, float th,
                      float r, float g, float b, float a);
+        void addQuad(GLuint tex, float useTex,
+                     float x, float y, float w, float h,
+                     float tx, float ty, float tw, float th,
+                     float r, float g, float b, float a,
+                     int flip_x, int flip_y);
         void flush_queue();
         void swap();
         void clear();

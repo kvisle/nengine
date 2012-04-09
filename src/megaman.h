@@ -14,7 +14,15 @@ class megaman : public sprite {
 
     private:
 
-        void moveGravity();
+        int jumping;
+        int falling;
+        int walking;
+
+        int jump_progress;
+
+        int moveLeftRight();
+        int moveGravity();
+        int moveJump();
 };
 
 #endif /* __MEGAMAN_H__ */

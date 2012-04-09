@@ -13,6 +13,9 @@ sprite::sprite(game *g, int x, int y, int z, std::string tex)
     frame = 0;
     intcount = 0;
     animation = 0;
+
+    flip_x = 0;
+    flip_y = 0;
 }
 
 sprite::sprite(game *g, int x, int y, int z, std::string tex, Json::Value json)
@@ -21,6 +24,9 @@ sprite::sprite(game *g, int x, int y, int z, std::string tex, Json::Value json)
     frame = 0;
     intcount = 0;
     animation = 0;
+
+    flip_x = 0;
+    flip_y = 0;
 
     loadJson(json);
 }
@@ -133,9 +139,11 @@ sprite::render()
             animations[animation].frames.size(),
             animations[animation].frames[frame]);*/
 
-    g->r->addQuad(tex->getTexture(),
+    g->r->addQuad(tex->getTexture(), 1.0,
                   x+f->ox, y+f->oy, qw, qh,
-                  f->x, f->y, f->w, f->h);
+                  f->x, f->y, f->w, f->h,
+                  1.0f, 1.0f, 1.0f, 1.0f,
+                  flip_x, flip_y);
 
     renderBox();
 }
