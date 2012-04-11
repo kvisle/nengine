@@ -12,8 +12,9 @@ int main(int argc, char *argv[])
 {
     int done = 0;
 
-
-//    freopen("stdout.txt","w",stdout);
+#ifdef __WIN32__
+    freopen("stdout.txt","w",stdout);
+#endif
     if (SDL_Init (SDL_INIT_VIDEO) != 0)
     {
         std::cerr << "Unable to initialize SDL:" << SDL_GetError () << std::endl;
@@ -47,7 +48,6 @@ int main(int argc, char *argv[])
             }
         }
 
-        puts("mainloop");
         g.update();
         g.render();
 

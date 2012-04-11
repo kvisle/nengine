@@ -57,11 +57,11 @@ int
 megaman::moveLeftRight()
 {
     int gx = 0, gy = 0;
-    if ( g->in->keys['a'] )
+    if ( g->in->keys['a'] || g->in->keys['A'] )
     {
         gx -= 4;
     }
-    if ( g->in->keys['d'] )
+    if ( g->in->keys['d'] || g->in->keys['D'] )
     {
         gx += 4;
     }

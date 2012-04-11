@@ -14,6 +14,8 @@
 #include <ppapi/cpp/size.h>
 #include <ppapi/cpp/rect.h>
 
+#include <ppapi/cpp/input_event.h>
+
 #include "gl.h"
 
 #include "game.h"
@@ -142,7 +144,8 @@ namespace nengine {
 
     public:
         explicit NengineInstance(PP_Instance instance) : pp::Instance(instance) {
-
+            RequestInputEvents(PP_INPUTEVENT_CLASS_MOUSE | PP_INPUTEVENT_CLASS_WHEEL);
+            RequestFilteringInputEvents(PP_INPUTEVENT_CLASS_KEYBOARD);
         }
         virtual ~NengineInstance() {}
 
@@ -174,6 +177,29 @@ namespace nengine {
             g->render();
             opengl_context_->FlushContext();
         }
+
+        virtual bool HandleInputEvent(const pp::InputEvent& event) {
+            if ( g == NULL )
+                return true;
+
+            pp::KeyboardInputEvent k(event);
+
+            switch (event.GetType()) {
+                case PP_INPUTEVENT_TYPE_KEYDOWN:
+                    printf("k.GetKeyCode (down): %c\n", k.GetKeyCode());
+                    g->in->keys[k.GetKeyCode()] = 1;
+                    break;
+                case PP_INPUTEVENT_TYPE_KEYUP:
+                    printf("k.GetKeyCode (up): %c\n", k.GetKeyCode());
+                    g->in->keys[k.GetKeyCode()] = 0;
+                    break;
+                default:
+                    break;
+            }
+            fflush(stdout);
+            return true;
+        }
+
 
     private:
         SharedOpenGLContext opengl_context_;
