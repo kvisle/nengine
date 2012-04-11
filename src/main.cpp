@@ -1,8 +1,9 @@
 #include <iostream>
 #include <SDL.h>
 
-#include <GL/glew.h>
-#include <GL/gl.h>
+#include "gl.h"
+/*#include <GL/glew.h>
+#include <GL/gl.h>*/
 
 #include "game.h"
 #include "input.h"
@@ -12,7 +13,7 @@ int main(int argc, char *argv[])
     int done = 0;
 
 
-    freopen("stdout.txt","w",stdout);
+//    freopen("stdout.txt","w",stdout);
     if (SDL_Init (SDL_INIT_VIDEO) != 0)
     {
         std::cerr << "Unable to initialize SDL:" << SDL_GetError () << std::endl;
@@ -46,6 +47,7 @@ int main(int argc, char *argv[])
             }
         }
 
+        puts("mainloop");
         g.update();
         g.render();
 

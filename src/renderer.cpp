@@ -1,6 +1,8 @@
 #include <iostream>
 
+#ifdef TARGET_SDL
 #include <SDL.h>
+#endif
 
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -12,7 +14,9 @@
 
 renderer::renderer(float w, float h)
 {
+#ifdef USE_GLEW
     glewInit();
+#endif
 
     this->w = w;
     this->h = h;
@@ -168,11 +172,17 @@ renderer::swap()
     if ( !queue.empty() )
         flush_queue();
 
+#ifdef TARGET_SDL
     SDL_GL_SwapBuffers();
+#endif
+#ifdef __native_client__
+
+#endif
 }
 
 void
 renderer::clear()
 {
+    glClearColor(0.0, 0.0, 0.0, 0.0);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 }

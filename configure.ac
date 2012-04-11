@@ -32,6 +32,17 @@ AC_CHECK_LIB([m], [main])
 # Checks for header files.
 AC_CHECK_HEADERS([stdint.h])
 
+case "$host" in
+*nacl*)
+    AM_CONDITIONAL([NACL], [true])
+    AM_CONDITIONAL([SDL], [false])
+    ;;
+*)
+    AM_CONDITIONAL([NACL], [false])
+    AM_CONDITIONAL([SDL], [true])
+    ;;
+esac
+
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_UINT32_T
 

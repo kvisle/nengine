@@ -3,8 +3,7 @@
 
 #include <string>
 
-#include <GL/glew.h>
-#include <GL/gl.h>
+#include "gl.h"
 
 class image {
     public:

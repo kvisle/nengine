@@ -1,7 +1,9 @@
 #include <iostream>
 #include <cstdio>
 
+#ifdef TARGET_SDL
 #include <SDL.h>
+#endif
 
 #include "renderer.h"
 #include "resourcemanager.h"
@@ -68,12 +70,14 @@ game::update()
 {
     updateno++;
 
+#ifdef TARGET_SDL
     if ( updateno % 60 == 0 )
     {
         char caption[128];
         sprintf(caption, "Assets: %lu", assets.size());
         SDL_WM_SetCaption(caption, NULL);
     }
+#endif
 
     for (uint32_t i=0; i < assets.size(); i++)
     {

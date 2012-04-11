@@ -1,8 +1,7 @@
 #ifndef __SHADER_H__
 #define __SHADER_H__
 
-#include <GL/glew.h>
-#include <GL/gl.h>
+#include "gl.h"
 
 class resource;
 

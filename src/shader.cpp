@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <cstdio>
 
 #include "resource.h"
 #include "shader.h"
@@ -66,6 +67,7 @@ shader::compile(resource *program, GLenum st)
         GLsizei length;
         glGetShaderInfoLog (shader, sizeof (buf), &length, buf);
         std::cout << "Failed to compile shader: " << buf << std::endl;
+        fflush(stdout);
         return 0;
     }
 
@@ -93,6 +95,7 @@ shader::link(GLuint vid, GLuint fid)
     if (!status)
     {
         std::cout << "Failed to link shader program" << std::endl;
+        fflush(stdout);
         return 0;
     }
 
