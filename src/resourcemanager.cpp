@@ -46,6 +46,17 @@ resourcemanager::~resourcemanager()
 image *
 resourcemanager::getImage(std::string filename)
 {
+    return getImage(filename, 0);
+}
+
+image *
+resourcemanager::getImage(std::string filename, int forcereload)
+{
+    if ( forcereload && img[filename] ) {
+        delete(img[filename]);
+        img.erase(img.find(filename));
+    }
+
     if ( !img[filename] ) {
         resource r(filename);
         img[filename] = new image((const unsigned char *) r.getRaw(), r.getLength());

@@ -48,7 +48,7 @@ tile::render(float x, float y, float w, float h)
         return;
 //    printf("Rendering at: %2.2f, %2.2f, %2.2f, %2.2f\n", sx, sy, sw, sh);
 
-    g->r->addQuad(tex->getTexture(),
+    g->r->addQuad(tex->getTexture(), &(g->c),
                   x, y, w, h,
                   sx, sy, sw, sh);
 }

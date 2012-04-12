@@ -18,7 +18,7 @@
 #include "megaman.h"
 #include "input.h"
 
-game::game()
+game::game() : c(0, 0, 960, 640)
 {
     updateno = 0;
 
@@ -27,17 +27,8 @@ game::game()
     rm = new resourcemanager(this);
     f = new font(rm->getImage("charmap3.png"), this, 16, 16);
 
-    c.x = 0;
-    c.y = 0;
-    c.w = 960;
-    c.h = 640;
-
-    assets.push_back(new tilemap(this, rm->getImage("tilemap.png"), "tileset2.png", "tileset2.json"));
-
-    assets.push_back(new megaman(this, 64, 64, 0));
-//    assets.push_back(new sprite(this, 20, 20, 20, "megaman.png", resource("sprite.json").getJson()));
-//    assets.push_back(new tilemap(this, "tileset.png", resource("tilemap.json").getJson()));
-//    tileset foo(this, "tileset.png", resource("tileset.json").getJson());
+    assets.push_back(new tilemap(this, "tilemap.png", "gfx.png", "gfxts1.json"));
+    assets.push_back(new megaman(this, 124*32, 64, 0));
 
     std::cout << "Made game" << std::endl;
 }
@@ -60,7 +51,9 @@ game::render()
         assets[i]->render();
     }
 
-    f->drawString("\\ffe680ff\\trygve is testing", 0, 0);
+    f->drawString("\\000000ff\\trygve is testing", 2, 2, NULL);
+    f->drawString("\\ff0000ff\\trygve is testing", 0, 0, NULL);
+
 
     r->swap();
 }
@@ -85,6 +78,8 @@ game::update()
     }
 
 
+    this->setReload(0);
+
     return 0;
 }
 
@@ -101,4 +96,16 @@ game::collides(float x, float y, float w, float h, drawable * me)
 
     }
     return ret;
+}
+
+void
+game::setReload( int val )
+{
+    this->reload = val;
+}
+
+int
+game::getReload()
+{
+    return reload;
 }

@@ -139,7 +139,7 @@ sprite::render()
             animations[animation].frames.size(),
             animations[animation].frames[frame]);*/
 
-    g->r->addQuad(tex->getTexture(), 1.0,
+    g->r->addQuad(tex->getTexture(), 1.0, &(g->c),
                   x+f->ox, y+f->oy, qw, qh,
                   f->x, f->y, f->w, f->h,
                   1.0f, 1.0f, 1.0f, 1.0f,
@@ -157,7 +157,8 @@ sprite::renderBox()
         myb.x += this->x;
         myb.y += this->y;
 
-        g->r->addOpQuad(myb.x, myb.y, myb.w, myb.h,
+        g->r->addOpQuad(&(g->c),
+                        myb.x, myb.y, myb.w, myb.h,
                         1, 1, 1, 0.5);
     }
 }

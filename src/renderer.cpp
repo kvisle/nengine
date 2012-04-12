@@ -11,6 +11,7 @@
 #include "shader.h"
 #include "renderer.h"
 #include "resource.h"
+#include "camera.h"
 
 renderer::renderer(float w, float h)
 {
@@ -40,31 +41,32 @@ renderer::~renderer()
 }
 
 void
-renderer::addOpQuad(float x, float y, float w, float h,
+renderer::addOpQuad(camera *c,
+                    float x, float y, float w, float h,
                     float r, float g, float b, float a)
 {
-    addQuad(tex, 0.0, x, y, w, h, 0.0, 0.0, 0.0, 0.0, r, g, b, a, 0, 0);
+    addQuad(tex, 0.0, c, x, y, w, h, 0.0, 0.0, 0.0, 0.0, r, g, b, a, 0, 0);
 }
 
 void
-renderer::addQuad(GLuint qtex,
+renderer::addQuad(GLuint qtex, camera *c,
                    float x, float y, float w, float h,
                    float tx, float ty, float tw, float th)
 {
-    addQuad(qtex, 1.0, x, y, w, h, tx, ty, tw, th, 1, 1, 1, 1, 0, 0);
+    addQuad(qtex, 1.0, c, x, y, w, h, tx, ty, tw, th, 1, 1, 1, 1, 0, 0);
 }
 
 void
-renderer::addQuad(GLuint qtex, float usetex,
+renderer::addQuad(GLuint qtex, float usetex, camera *c,
                    float x, float y, float w, float h,
                    float tx, float ty, float tw, float th,
                    float r, float g, float b, float a)
 {
-    addQuad(qtex, usetex, x, y, w, h, tx, ty, tw, th, r, g, b, a, 0, 0);
+    addQuad(qtex, usetex, c, x, y, w, h, tx, ty, tw, th, r, g, b, a, 0, 0);
 }
 
 void
-renderer::addQuad(GLuint qtex, float usetex,
+renderer::addQuad(GLuint qtex, float usetex, camera *c,
                    float x, float y, float w, float h, 
                    float tx, float ty, float tw, float th,
                    float r, float g, float b, float a,
@@ -74,6 +76,12 @@ renderer::addQuad(GLuint qtex, float usetex,
     {
         flush_queue();
         tex = qtex;
+    }
+
+    if ( c )
+    {
+        x -= c->x;
+        y -= c->y;
     }
 
     vertex2f v;

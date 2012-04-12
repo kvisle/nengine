@@ -33,6 +33,10 @@ AC_CHECK_LIB([m], [main])
 AC_CHECK_HEADERS([stdint.h])
 
 case "$host" in
+*android*)
+    AM_CONDITIONAL([NACL], [false])
+    AM_CONDITIONAL([SDL], [false])
+    ;;
 *nacl*)
     AM_CONDITIONAL([NACL], [true])
     AM_CONDITIONAL([SDL], [false])

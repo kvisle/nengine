@@ -21,6 +21,8 @@ class game {
         int update();
 
         int collides(float x, float y, float w, float h, drawable *me);
+        void setReload(int val);
+        int getReload();
 
         renderer *r;
         resourcemanager *rm;
@@ -28,6 +30,8 @@ class game {
 
         camera c;
         font *f;
+
+        int reload;
 
     private:
         std::vector<drawable*> assets;

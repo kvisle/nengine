@@ -32,16 +32,28 @@ tilemap::tilemap(game *g, std::string t, Json::Value json)
 
 }
 
-tilemap::tilemap(game *g, image *img, std::string t, std::string tileset)
+tilemap::tilemap(game *g, std::string imgr, std::string t, std::string tileset)
        : drawable(g, 0, 0, 0, t)
 {
+    ts = g->rm->getTileset(tileset, t);
+    imgrname = imgr;
+
+
+    loadMap(imgr);
+}
+
+void
+tilemap::loadMap(std::string imgr)
+{
+    image * img = g->rm->getImage(imgr, 1);
+
     w = img->w;
     h = img->h;
 
     tw = 32;
     th = 32;
 
-    ts = g->rm->getTileset(tileset, t);
+    map.reserve(w*h);
 
     for (int i = 0; i < w * h; i++)
     {
@@ -52,38 +64,38 @@ tilemap::tilemap(game *g, image *img, std::string t, std::string tileset)
         unsigned char b = img->pixels[i*4+2];
         unsigned char a = img->pixels[i*4+3];
 
-        if      ( r == 0x00 && g == 0xcc && b == 0x00 ) x = 1;
-        else if ( r == 0x00 && g == 0x66 && b == 0xb3 ) x = 2;
-        else if ( r == 0xff && g == 0x80 && b == 0x00 ) x = 3;
-        else if ( r == 0xff && g == 0xcc && b == 0x00 ) x = 4;
-        else if ( r == 0x33 && g == 0x00 && b == 0x99 ) x = 5;
-        else if ( r == 0x99 && g == 0x00 && b == 0x99 ) x = 6;
-        else if ( r == 0xcc && g == 0xff && b == 0x00 ) x = 7;
-        else if ( r == 0xff && g == 0x00 && b == 0x00 ) x = 8;
-        else if ( r == 0x80 && g == 0x80 && b == 0x80 ) x = 9;
-        else if ( r == 0x00 && g == 0x8f && b == 0x00 ) x = 10;
-        else if ( r == 0x00 && g == 0x48 && b == 0x7d ) x = 11;
-        else if ( r == 0xb3 && g == 0x5a && b == 0x00 ) x = 12;
-        else if ( r == 0xb3 && g == 0x8f && b == 0x00 ) x = 13;
-        else if ( r == 0x6b && g == 0x00 && b == 0x6b ) x = 14;
-        else if ( r == 0x8f && g == 0xb3 && b == 0x00 ) x = 15;
-        else if ( r == 0xb3 && g == 0x00 && b == 0x00 ) x = 16;
-        else if ( r == 0xbe && g == 0xbe && b == 0xbe ) x = 17;
-        else if ( r == 0x80 && g == 0xff && b == 0x80 ) x = 18;
-        else if ( r == 0x80 && g == 0xc9 && b == 0xff ) x = 19;
-        else if ( r == 0xff && g == 0xc0 && b == 0x80 ) x = 20;
-        else if ( r == 0xff && g == 0xe6 && b == 0x80 ) x = 21;
-        else if ( r == 0xaa && g == 0x80 && b == 0xff ) x = 22;
-        else if ( r == 0xee && g == 0x00 && b == 0xcc ) x = 23;
-        else if ( r == 0xff && g == 0x80 && b == 0x80 ) x = 24;
-        else if ( r == 0x66 && g == 0x66 && b == 0x00 ) x = 25;
-        else if ( r == 0xff && g == 0xbf && b == 0xff ) x = 26;
-        else if ( r == 0x00 && g == 0xff && b == 0xcc ) x = 27;
-        else if ( r == 0xcc && g == 0x66 && b == 0x99 ) x = 28;
-        else if ( r == 0x99 && g == 0x99 && b == 0x00 ) x = 29;
+        if      ( r == 0x00 && g == 0xcc && b == 0x00 ) x = 0;
+        else if ( r == 0x00 && g == 0x66 && b == 0xb3 ) x = 1;
+        else if ( r == 0xff && g == 0x80 && b == 0x00 ) x = 2;
+        else if ( r == 0xff && g == 0xcc && b == 0x00 ) x = 3;
+        else if ( r == 0x33 && g == 0x00 && b == 0x99 ) x = 4;
+        else if ( r == 0x99 && g == 0x00 && b == 0x99 ) x = 5;
+        else if ( r == 0xcc && g == 0xff && b == 0x00 ) x = 6;
+        else if ( r == 0xff && g == 0x00 && b == 0x00 ) x = 7;
+        else if ( r == 0x80 && g == 0x80 && b == 0x80 ) x = 8;
+        else if ( r == 0x00 && g == 0x8f && b == 0x00 ) x = 9;
+        else if ( r == 0x00 && g == 0x48 && b == 0x7d ) x = 10;
+        else if ( r == 0xb3 && g == 0x5a && b == 0x00 ) x = 11;
+        else if ( r == 0xb3 && g == 0x8f && b == 0x00 ) x = 12;
+        else if ( r == 0x6b && g == 0x00 && b == 0x6b ) x = 13;
+        else if ( r == 0x8f && g == 0xb3 && b == 0x00 ) x = 14;
+        else if ( r == 0xb3 && g == 0x00 && b == 0x00 ) x = 15;
+        else if ( r == 0xbe && g == 0xbe && b == 0xbe ) x = 16;
+        else if ( r == 0x80 && g == 0xff && b == 0x80 ) x = 17;
+        else if ( r == 0x80 && g == 0xc9 && b == 0xff ) x = 18;
+        else if ( r == 0xff && g == 0xc0 && b == 0x80 ) x = 19;
+        else if ( r == 0xff && g == 0xe6 && b == 0x80 ) x = 20;
+        else if ( r == 0xaa && g == 0x80 && b == 0xff ) x = 21;
+        else if ( r == 0xee && g == 0x00 && b == 0xcc ) x = 22;
+        else if ( r == 0xff && g == 0x80 && b == 0x80 ) x = 23;
+        else if ( r == 0x66 && g == 0x66 && b == 0x00 ) x = 24;
+        else if ( r == 0xff && g == 0xbf && b == 0xff ) x = 25;
+        else if ( r == 0x00 && g == 0xff && b == 0xcc ) x = 26;
+        else if ( r == 0xcc && g == 0x66 && b == 0x99 ) x = 27;
+        else if ( r == 0x99 && g == 0x99 && b == 0x00 ) x = 28;
         else                                            x = -1;
 
-        map.push_back(x);
+        map[i] = x;
     }
 }
 
@@ -119,6 +131,10 @@ void
 tilemap::update()
 {
     ts->update();
+
+    if ( g->getReload() ) {
+        loadMap(imgrname);
+    }
 }
 
 int
@@ -149,4 +165,3 @@ tilemap::collidesWith(float x, float y, float w, float h, drawable *other)
 //    printf("Returning: %d\n", ret);
     return ret;
 }
-

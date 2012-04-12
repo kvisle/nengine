@@ -14,6 +14,7 @@ class resourcemanager {
         ~resourcemanager();
 
         image * getImage(std::string filename);
+        image * getImage(std::string filename, int forcereload);
         tileset * getTileset(std::string filename, std::string tex);
 
         unsigned char *getPixels(std::string filename);

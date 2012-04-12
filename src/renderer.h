@@ -14,22 +14,24 @@ struct vertex2f {
 };
 
 class shader;
+class camera;
 
 class renderer {
     public:
         renderer(float w, float h);
         ~renderer();
 
-        void addOpQuad(float x, float y, float w, float h,
+        void addOpQuad(camera *c,
+                       float x, float y, float w, float h,
                        float r, float g, float b, float a);
-        void addQuad(GLuint tex, 
+        void addQuad(GLuint tex, camera *c,
                      float x, float y, float w, float h,
                      float tx, float ty, float tw, float th);
-        void addQuad(GLuint tex, float useTex,
+        void addQuad(GLuint tex, float useTex, camera *c,
                      float x, float y, float w, float h,
                      float tx, float ty, float tw, float th,
                      float r, float g, float b, float a);
-        void addQuad(GLuint tex, float useTex,
+        void addQuad(GLuint tex, float useTex, camera *c,
                      float x, float y, float w, float h,
                      float tx, float ty, float tw, float th,
                      float r, float g, float b, float a,

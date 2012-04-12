@@ -1,3 +1,4 @@
+#include <cstdio>
 #include "megaman.h"
 #include "font.h"
 #include "game.h"
@@ -8,9 +9,9 @@
 #define ANIMATION_FALL  3
 
 megaman::megaman(game *g, int x, int y, int z)
-       : sprite(g, x, y, z, "megaman.png")
+       : sprite(g, x, y, z, "gfx.png")
 {
-    loadJson(std::string("sprite.json"));
+    loadJson(std::string("player.json"));
 
     jumping = 0;
     falling = 0;
@@ -33,14 +34,14 @@ megaman::update()
     else if ( jumping ) setAnimation(ANIMATION_FALL);
     else if ( walking ) setAnimation(ANIMATION_WALK);
     else                setAnimation(ANIMATION_IDLE);
+
+    g->c.snapAt(x+32, y+32);
 }
 
 void
 megaman::render()
 {
     sprite::render();
-
-    g->f->drawString("megaman", x - 24, y - 24);
 }
 
 int

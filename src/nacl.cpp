@@ -163,9 +163,10 @@ namespace nengine {
             glClearColor(0.0, 0.0, 0.0, 0.0);
 
             if (g == NULL)
+            {
                 g = new game();
-
-            UpdateScheduler(16, this);
+                UpdateScheduler(16, this);
+            }
         }
 
         void Update(void) {

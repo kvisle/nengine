@@ -14,12 +14,14 @@ class image;
 class tilemap : public drawable {
     public:
         tilemap(game *g, std::string t, Json::Value json);
-        tilemap(game *g, image *i, std::string t, std::string tileset);
+        tilemap(game *g, std::string imgr, std::string t, std::string tileset);
 
         ~tilemap();
 
         virtual void render();
         virtual void update();
+
+        void loadMap(std::string imgr);
 
         virtual int collidesWith(float x, float y, float w, float h, drawable *other);
 
@@ -30,6 +32,7 @@ class tilemap : public drawable {
         tileset *ts;
 
         std::vector<int> map;
+        std::string imgrname;
 };
 
 #endif /* __TILEMAP_H__ */

@@ -1,0 +1,36 @@
+{
+  "qw" : 64,
+  "qh" : 64,
+  "box" : [
+    { "x": 16, "y": 16, "w": 32, "h": 48, "bits": 0 }
+  ],
+  "frames" : [
+    { "x": 0.000, "y": 0.25, "w": 0.125, "h": 0.125, "box": [ 0 ] }
+  ],
+  "animations" : [
+    {
+      "id" : 0, // Idle
+      "loop" : 1,
+      "interval" : 10,
+      "frames" : [ 0 ]
+    },
+    {
+      "id" : 1, // Walk
+      "loop" : 1,
+      "interval" : 10,
+      "frames" : [ 0 ]
+    },
+    {
+      "id" : 2, // Walk with gun
+      "loop" : 1,
+      "interval" : 10,
+      "frames" : [ 0 ]
+    },
+    {
+      "id" : 3, // Jump
+      "loop" : 1,
+      "interval" : 10,
+      "frames" : [ 0 ]
+    }
+  ]
+}
