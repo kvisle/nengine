@@ -11,6 +11,7 @@ class image;
 class drawable;
 class font;
 class input;
+class osd;
 
 class game {
     public:
@@ -36,6 +37,8 @@ class game {
     private:
         std::vector<drawable*> assets;
         int updateno;
+
+        osd *o;
 };
 
 #endif /* __GAME_H__ */

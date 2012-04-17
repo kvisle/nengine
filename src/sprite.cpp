@@ -1,5 +1,6 @@
 #include <cstdio>
 #include "game.h"
+#include "bits.h"
 #include "drawable.h"
 #include "sprite.h"
 #include "renderer.h"
@@ -169,57 +170,122 @@ sprite::update()
 }
 
 int
-sprite::attemptMove(int *x, int *y)
+sprite::attemptMove(int *x, int *y, int bits)
 {
     int ret = 0;
+    int mx, my;
     while( *x != 0 || *y != 0 )
     {
         if ( *x > 0 ) {
-            ret = attemptMoveStep(1, 0);
+            mx = 1;
+            my = 0;
+            ret = attemptMoveStep(&mx, &my, bits);
             if ( ret )
                 return ret;
             *x -= 1;
-            this->x++;
+            this->x += mx;
+            this->y += my;
         }
         if ( *x < 0 ) {
-            ret = attemptMoveStep(-1, 0);
+            mx = -1;
+            my = 0;
+            ret = attemptMoveStep(&mx, &my, bits);
             if ( ret )
                 return ret;
             *x += 1;
-            this->x--;
+            this->x += mx;
+            this->y += my;
         }
         if ( *y > 0 ) {
-            ret = attemptMoveStep(0, 1);
+            mx = 0;
+            my = 1;
+            ret = attemptMoveStep(&mx, &my, bits);
             if ( ret )
                 return ret;
             *y -= 1;
-            this->y++;
+            this->x += mx;
+            this->y += my;
         }
         if ( *y < 0 ) {
-            ret = attemptMoveStep(0, -1);
+            mx = 0;
+            my = -1;
+            ret = attemptMoveStep(&mx, &my, bits);
             if ( ret )
                 return ret;
             *y += 1;
-            this->y--;
+            this->x += mx;
+            this->y += my;
         }
+
     }
     return 0;
 }
 
 int
-sprite::attemptMoveStep(int x, int y)
+sprite::attemptMoveStep(int *x, int *y, int bits)
 {
     int ret = 0;
 
     for (int i = 0; i < frames[animations[animation].frames[frame]].boxes.size(); i++)
     {
         struct box myb = boxes[frames[animations[animation].frames[frame]].boxes[i]];
-        myb.x += this->x + x;
-        myb.y += this->y + y;
-
-//        printf("x: %02d y: %02d w: %02d h: %02d\n", myb.x, myb.y, myb.w, myb.h);
+        myb.x += this->x + *x;
+        myb.y += this->y + *y;
 
         ret |= g->collides(myb.x, myb.y, myb.w, myb.h, this);
+    }
+
+    if ( (ret & (BIT_SLOPE_NE|BIT_SOLID)) == (BIT_SLOPE_NE|BIT_SOLID) && (bits & BIT_SLOPE_NE) )
+    {
+        if ( *x == 1 && *y == 0 )
+        {
+            *y -= 1;
+            return attemptMoveStep(x, y, 0);
+        }
+        if ( *x == 0 && *y == -1 )
+        {
+            *x -= 1;
+            return attemptMoveStep(x, y, 0);
+        }
+    }
+    if ( (ret & (BIT_SLOPE_NW|BIT_SOLID)) == (BIT_SLOPE_NW|BIT_SOLID) && (bits & BIT_SLOPE_NW) )
+    {
+        if ( *x == -1 && *y == 0 )
+        {
+            *y -= 1;
+            return attemptMoveStep(x, y, 0);
+        }
+        if ( *x == 0 && *y == -1 )
+        {
+            *x += 1;
+            return attemptMoveStep(x, y, 0);
+        }
+    }
+    if ( (ret & (BIT_SLOPE_SE|BIT_SOLID)) == (BIT_SLOPE_SE|BIT_SOLID) && (bits & BIT_SLOPE_SE) )
+    {
+        if ( *x == 1 && *y == 0 )
+        {
+            *y -= 1;
+            return attemptMoveStep(x, y, 0);
+        }
+        if ( *x == 0 && *y == 1 )
+        {
+            *x += 1;
+            return attemptMoveStep(x, y, 0);
+        }
+    }
+    if ( (ret & (BIT_SLOPE_SW|BIT_SOLID)) == (BIT_SLOPE_SW|BIT_SOLID) && (bits & BIT_SLOPE_SW) )
+    {
+        if ( *x == -1 && *y == 0 )
+        {
+            *y -= 1;
+            return attemptMoveStep(x, y, 0);
+        }
+        if ( *x == 0 && *y == 1 )
+        {
+            *x += 1;
+            return attemptMoveStep(x, y, 0);
+        }
     }
 
     return ret;

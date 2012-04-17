@@ -28,6 +28,10 @@ class tilemap : public drawable {
         int w, h;
         int tw, th;
 
+        int checkSlope(int x, int y, int w, int h, int type);
+        void getTileBox(int *x, int *y, int *w, int *h, int tileid);
+
+
     private:
         tileset *ts;
 

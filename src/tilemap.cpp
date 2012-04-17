@@ -6,6 +6,7 @@
 #include "tile.h"
 #include "game.h"
 #include "image.h"
+#include "bits.h"
 
 tilemap::tilemap(game *g, std::string t, Json::Value json)
        : drawable(g, 0, 0, 0, t)
@@ -50,8 +51,8 @@ tilemap::loadMap(std::string imgr)
     w = img->w;
     h = img->h;
 
-    tw = 32;
-    th = 32;
+    tw = 16;
+    th = 16;
 
     map.reserve(w*h);
 
@@ -138,6 +139,46 @@ tilemap::update()
 }
 
 int
+tilemap::checkSlope(int x, int y, int w, int h, int type)
+{
+    if ( type == BIT_SLOPE_NE || type == BIT_SLOPE_NW )
+    { /* flip_y */
+        y = (th - y - h);
+    }
+
+    if ( type == BIT_SLOPE_SW || type == BIT_SLOPE_NW )
+    { /* flip_x */
+        x = (tw - x - w);
+    }
+
+    if ( x+w + y+h > tw )
+        return 1;
+
+    return 0;
+}
+
+void
+tilemap::getTileBox(int *x, int *y, int *w, int *h, int tileid)
+{
+    int tx = (tileid % this->w) * tw;
+    int ty = (tileid / this->w) * th;
+
+    int bx = *x - tx;
+    int by = *y - ty;
+
+    if ( bx < 0 ) bx = 0;
+    if ( by < 0 ) by = 0;
+
+    int bw = ( *x + *w > tx+tw ) ? tw - bx :  *x + *w - tx - bx;
+    int bh = ( *y + *h > ty+th ) ? th - by :  *y + *h - ty - bh;
+
+    *x = bx;
+    *y = by;
+    *w = bw;
+    *h = bh;
+}
+
+int
 tilemap::collidesWith(float x, float y, float w, float h, drawable *other)
 {
     int ret = 0;
@@ -147,21 +188,36 @@ tilemap::collidesWith(float x, float y, float w, float h, drawable *other)
     int lx = (x+w-1) / tw;
     int ly = (y+h-1) / th;
 
-/*    printf("x: %2.2f, y: %2.2f, tw: %02d, th: %02d, tx: %02d, ty: %02d lx: %02d, ly: %02d\n",
-            x, y, tw, th, tx, ty, lx, ly);*/
-
     for (int xp = tx; xp <= lx ; xp++)
     {
         for (int yp = ty; yp <= ly ; yp++)
         {
             int bits = ts->getIndex(map[yp*this->w+xp])->bits;
-//            printf("Checking index: %d == %d (bits: %d)\n",yp*this->w+xp, map[yp*this->w+xp], bits);
 
+            int tbx = x;
+            int tby = y;
+            int tbw = w;
+            int tbh = h;
 
-            if ( bits & 1 ) { ret |= 1; }
+            getTileBox(&tbx, &tby, &tbw, &tbh, (yp*this->w)+xp);
+
+            if ( bits & BIT_SOLID )
+                ret |= BIT_SOLID;
+
+            if ( (bits & BIT_SLOPE_NE) && checkSlope(tbx, tby, tbw, tbh, BIT_SLOPE_NE) ) 
+                ret |= (BIT_SOLID|BIT_SLOPE_NE);
+
+            if ( (bits & BIT_SLOPE_NW) && checkSlope(tbx, tby, tbw, tbh, BIT_SLOPE_NW) )
+                ret |= (BIT_SOLID|BIT_SLOPE_NW);
+
+            if ( (bits & BIT_SLOPE_SE) && checkSlope(tbx, tby, tbw, tbh, BIT_SLOPE_SE) )
+                ret |= (BIT_SOLID|BIT_SLOPE_SE);
+
+            if ( (bits & BIT_SLOPE_SW) && checkSlope(tbx, tby, tbw, tbh, BIT_SLOPE_SW) )
+                ret |= (BIT_SOLID|BIT_SLOPE_SW);
+
         }
     }
 
-//    printf("Returning: %d\n", ret);
     return ret;
 }

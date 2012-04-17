@@ -37,8 +37,8 @@ class sprite : public drawable {
         virtual void renderBox();
         virtual void update();
 
-        int attemptMove(int *x, int *y);
-        int attemptMoveStep(int x, int y);
+        int attemptMove(int *x, int *y, int bits);
+        int attemptMoveStep(int *x, int *y, int bits);
 
         void loadJson(Json::Value spec);
         void loadJson(std::string res);

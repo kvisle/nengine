@@ -1,4 +1,5 @@
 #include <cstdio>
+#include "bits.h"
 #include "megaman.h"
 #include "font.h"
 #include "game.h"
@@ -35,7 +36,7 @@ megaman::update()
     else if ( walking ) setAnimation(ANIMATION_WALK);
     else                setAnimation(ANIMATION_IDLE);
 
-    g->c.snapAt(x+32, y+32);
+    g->c.snapAt(x+16, y+16);
 }
 
 void
@@ -49,9 +50,9 @@ megaman::moveGravity()
 {
     if ( jumping )
         return 0;
-    int gy = 8, gx = 0;
+    int gy = 4, gx = 0;
 
-    return !attemptMove(&gx, &gy);
+    return !attemptMove(&gx, &gy, 0);
 }
 
 int
@@ -60,11 +61,11 @@ megaman::moveLeftRight()
     int gx = 0, gy = 0;
     if ( g->in->keys['a'] || g->in->keys['A'] )
     {
-        gx -= 4;
+        gx -= 2;
     }
     if ( g->in->keys['d'] || g->in->keys['D'] )
     {
-        gx += 4;
+        gx += 2;
     }
 
     if ( gx < 0 )
@@ -79,7 +80,7 @@ megaman::moveLeftRight()
     if ( gx == 0 )
         return 0;
 
-    return !attemptMove(&gx, &gy);
+    return !attemptMove(&gx, &gy, BIT_SLOPE_SW|BIT_SLOPE_SE);
 }
 
 int
@@ -102,9 +103,9 @@ megaman::moveJump()
     }
 
     int gx = 0;
-    int gy = -8;
+    int gy = -4;
 
     jump_progress++;
 
-    return !attemptMove(&gx, &gy);
+    return !attemptMove(&gx, &gy, 0);
 }

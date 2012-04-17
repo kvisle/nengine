@@ -17,18 +17,20 @@
 #include "sprite.h"
 #include "megaman.h"
 #include "input.h"
+#include "osd.h"
 
-game::game() : c(0, 0, 960, 640)
+game::game() : c(0, 0, 480, 320)
 {
     updateno = 0;
 
     in = new input();
-    r = new renderer(960, 640);
+    r = new renderer(480, 320);
     rm = new resourcemanager(this);
-    f = new font(rm->getImage("charmap3.png"), this, 16, 16);
+    f = new font(rm->getImage("charmap3.png"), this, 8, 8);
+    o = new osd(this);
 
     assets.push_back(new tilemap(this, "tilemap.png", "gfx.png", "gfxts1.json"));
-    assets.push_back(new megaman(this, 124*32, 64, 0));
+    assets.push_back(new megaman(this, 124*16, 95*16, 0));
 
     std::cout << "Made game" << std::endl;
 }
@@ -51,9 +53,7 @@ game::render()
         assets[i]->render();
     }
 
-    f->drawString("\\000000ff\\trygve is testing", 2, 2, NULL);
-    f->drawString("\\ff0000ff\\trygve is testing", 0, 0, NULL);
-
+    o->render();
 
     r->swap();
 }
