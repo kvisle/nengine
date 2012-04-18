@@ -2,6 +2,7 @@
 #define __MEGAMAN_H__
 
 #include "sprite.h"
+#include "input.h"
 
 class megaman : public sprite {
     public:
@@ -11,6 +12,7 @@ class megaman : public sprite {
 
         virtual void update();
         virtual void render();
+        virtual void input(union ninput in);
 
     private:
 
@@ -19,6 +21,7 @@ class megaman : public sprite {
         int walking;
 
         int jump_progress;
+        int jump_start;
 
         int moveLeftRight();
         int moveGravity();

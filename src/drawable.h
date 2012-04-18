@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "input.h"
+
 class game;
 class image;
 
@@ -14,7 +16,7 @@ class drawable {
         virtual void render();
         virtual void update();
         virtual int collidesWith(float x, float y, float w, float h, drawable *other);
-
+        virtual void input(union ninput in);
 
         game *g;
         int x, y, z;

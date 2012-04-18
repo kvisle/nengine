@@ -13,15 +13,17 @@ megaman::megaman(game *g, int x, int y, int z)
        : sprite(g, x, y, z, "gfx.png")
 {
     loadJson(std::string("player.json"));
+    g->in->subscribe(this);
 
     jumping = 0;
     falling = 0;
     walking = 0;
+    jump_start = 0;
 }
 
 megaman::~megaman()
 {
-
+    g->in->unsubscribe(this);
 }
 
 void
@@ -50,7 +52,7 @@ megaman::moveGravity()
 {
     if ( jumping )
         return 0;
-    int gy = 4, gx = 0;
+    int gy = 5, gx = 0;
 
     return !attemptMove(&gx, &gy, 0);
 }
@@ -86,15 +88,18 @@ megaman::moveLeftRight()
 int
 megaman::moveJump()
 {
+    int ret;
+
     if ( falling )
         return 0;
 
     if ( !g->in->keys[' '] )
         return 0;
 
-    if ( !jumping )
+    if ( !jumping && jump_start )
     {
         jump_progress = 0;
+        jump_start = 0;
     }
 
     if ( jump_progress >= 20 )
@@ -107,5 +112,23 @@ megaman::moveJump()
 
     jump_progress++;
 
-    return !attemptMove(&gx, &gy, 0);
+    ret = !attemptMove(&gx, &gy, 0);
+
+    if ( ret == 0 )
+        jump_progress = 21;
+
+    return ret;
+}
+
+void
+megaman::input(union ninput in)
+{
+    switch(in.type)
+    {
+    case NINPUT_KEYDOWN:
+        if ( in.key.sym == ' ' ) { jump_start = 1; }
+        break;
+    case NINPUT_KEYUP:
+        break;
+    }
 }

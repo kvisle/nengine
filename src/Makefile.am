@@ -1,6 +1,6 @@
 AM_CFLAGS = -Wall 
 bin_PROGRAMS = nengine
-nengine_SOURCES = game.cpp resource.cpp shader.cpp tilemap.cpp \
+nengine_SOURCES = game.cpp resource.cpp shader.cpp tilemap.cpp input.cpp \
                   drawable.cpp image.cpp renderer.cpp resourcemanager.cpp tile.cpp \
                   tileset.cpp font.cpp sprite.cpp megaman.cpp camera.cpp osd.cpp 
 

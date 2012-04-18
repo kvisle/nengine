@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
     while (!done)
     {
         SDL_Event e;
+        union ninput in;
         while(SDL_PollEvent(&e))
         {
             switch(e.type)
@@ -44,12 +45,23 @@ int main(int argc, char *argv[])
                 done++;
                 break;
             case SDL_KEYDOWN:
+                in.type = NINPUT_KEYDOWN;
+                in.key.sym = e.key.keysym.sym;
+                g.in->read_input(in);
+
                 g.in->keys[e.key.keysym.sym] = 1;
+
                 if ( e.key.keysym.sym == 'r' ) {
                     g.setReload(true);
                 }
                 break;
-            case SDL_KEYUP:   g.in->keys[e.key.keysym.sym] = 0; break;
+            case SDL_KEYUP:
+                in.type = NINPUT_KEYUP;
+                in.key.sym = e.key.keysym.sym;
+                g.in->read_input(in);
+
+                g.in->keys[e.key.keysym.sym] = 0;
+                break;
             }
         }
 

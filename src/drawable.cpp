@@ -38,3 +38,9 @@ drawable::collidesWith(float x, float y, float w, float h, drawable *other)
 
     return 0;
 }
+
+void
+drawable::input(union ninput in)
+{
+
+}
