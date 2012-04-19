@@ -12,6 +12,7 @@ class drawable;
 class font;
 class input;
 class osd;
+class audio;
 
 class game {
     public:
@@ -28,6 +29,7 @@ class game {
         renderer *r;
         resourcemanager *rm;
         input *in;
+        audio *a;
 
         camera c;
         font *f;

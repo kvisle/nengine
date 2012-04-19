@@ -3,6 +3,7 @@
 #include "resource.h"
 #include "image.h"
 #include "tileset.h"
+#include "sound.h"
 
 resourcemanager::resourcemanager(game *g)
 {
@@ -67,6 +68,20 @@ resourcemanager::getImage(std::string filename, int forcereload)
     }
 
     return img[filename];
+}
+
+sound *
+resourcemanager::getSound(std::string filename)
+{
+    if ( !snd[filename] ) {
+        snd[filename] = new sound(g, filename);
+    }
+
+    if ( !snd[filename] ) {
+        return NULL;
+    }
+
+    return snd[filename];
 }
 
 unsigned char *

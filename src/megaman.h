@@ -4,6 +4,8 @@
 #include "sprite.h"
 #include "input.h"
 
+class sound;
+
 class megaman : public sprite {
     public:
 
@@ -26,6 +28,8 @@ class megaman : public sprite {
         int moveLeftRight();
         int moveGravity();
         int moveJump();
+
+        sound *jumpsound;
 };
 
 #endif /* __MEGAMAN_H__ */

@@ -114,7 +114,7 @@ sprite::printInfo()
 void
 sprite::render()
 {
-    if ( animation >= (signed int)animations.size() )
+    if ( animation >= animations.size() )
         return;
 
     if ( ++intcount >= animations[animation].interval )
@@ -122,7 +122,7 @@ sprite::render()
         frame++;
         intcount = 0;
 
-        if ( frame >= (signed int)animations[animation].frames.size() )
+        if ( frame >= animations[animation].frames.size() )
         {
             frame = 0;
             if ( !animations[animation].loop )
@@ -152,7 +152,7 @@ sprite::render()
 void
 sprite::renderBox()
 {
-    for (int i = 0; i < frames[animations[animation].frames[frame]].boxes.size(); i++)
+    for (unsigned int i = 0; i < frames[animations[animation].frames[frame]].boxes.size(); i++)
     {
         struct box myb = boxes[frames[animations[animation].frames[frame]].boxes[i]];
         myb.x += this->x;
@@ -226,7 +226,7 @@ sprite::attemptMoveStep(int *x, int *y, int bits)
 {
     int ret = 0;
 
-    for (int i = 0; i < frames[animations[animation].frames[frame]].boxes.size(); i++)
+    for ( unsigned int i = 0; i < frames[animations[animation].frames[frame]].boxes.size(); i++)
     {
         struct box myb = boxes[frames[animations[animation].frames[frame]].boxes[i]];
         myb.x += this->x + *x;
@@ -292,12 +292,12 @@ sprite::attemptMoveStep(int *x, int *y, int bits)
 }
 
 void
-sprite::setAnimation(int x)
+sprite::setAnimation(unsigned int x)
 {
     if ( animation == x )
         return;
 
-    if ( x < 0 || x > animations.size() )
+    if ( x > animations.size() )
         return;
 
     animation = x;

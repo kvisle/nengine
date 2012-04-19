@@ -6,6 +6,7 @@
 #endif
 
 #include "renderer.h"
+#include "audio.h"
 #include "resourcemanager.h"
 #include "game.h"
 #include "image.h"
@@ -26,8 +27,9 @@ game::game() : c(0, 0, 480, 320)
     in = new input();
     r = new renderer(480, 320);
     rm = new resourcemanager(this);
-    f = new font(rm->getImage("charmap3.png"), this, 8, 8);
     o = new osd(this);
+    a = new audio();
+    f = new font(rm->getImage("charmap3.png"), this, 8, 8);
 
     assets.push_back(new tilemap(this, "tilemap.png", "gfx.png", "gfxts1.json"));
     assets.push_back(new megaman(this, 124*16, 95*16, 0));
@@ -41,6 +43,7 @@ game::~game()
     delete(r);
     delete(f);
     delete(in);
+    delete(a);
 }
 
 void

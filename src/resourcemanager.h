@@ -7,6 +7,7 @@
 class game;
 class image;
 class tileset;
+class sound;
 
 class resourcemanager {
     public:
@@ -16,6 +17,8 @@ class resourcemanager {
         image * getImage(std::string filename);
         image * getImage(std::string filename, int forcereload);
         tileset * getTileset(std::string filename, std::string tex);
+        sound * getSound(std::string filename);
+
 
         unsigned char *getPixels(std::string filename);
 
@@ -27,6 +30,7 @@ class resourcemanager {
         game *g;
         std::map<std::string, image*> img;
         std::map<std::string, tileset*> ts;
+        std::map<std::string, sound*> snd;
 
 };
 

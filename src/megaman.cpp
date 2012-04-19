@@ -4,6 +4,8 @@
 #include "font.h"
 #include "game.h"
 #include "input.h"
+#include "resourcemanager.h"
+#include "sound.h"
 
 #define ANIMATION_IDLE  0
 #define ANIMATION_WALK  1
@@ -14,6 +16,7 @@ megaman::megaman(game *g, int x, int y, int z)
 {
     loadJson(std::string("player.json"));
     g->in->subscribe(this);
+    jumpsound = g->rm->getSound("jumptest.wav");
 
     jumping = 0;
     falling = 0;
@@ -100,6 +103,7 @@ megaman::moveJump()
     {
         jump_progress = 0;
         jump_start = 0;
+        jumpsound->play();
     }
 
     if ( jump_progress >= 20 )

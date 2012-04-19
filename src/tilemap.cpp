@@ -97,6 +97,7 @@ tilemap::loadMap(std::string imgr)
         else                                            x = -1;
 
         map[i] = x;
+        (void)a;
     }
 }
 
@@ -170,7 +171,7 @@ tilemap::getTileBox(int *x, int *y, int *w, int *h, int tileid)
     if ( by < 0 ) by = 0;
 
     int bw = ( *x + *w > tx+tw ) ? tw - bx :  *x + *w - tx - bx;
-    int bh = ( *y + *h > ty+th ) ? th - by :  *y + *h - ty - bh;
+    int bh = ( *y + *h > ty+th ) ? th - by :  *y + *h - ty - by;
 
     *x = bx;
     *y = by;
@@ -220,4 +221,5 @@ tilemap::collidesWith(float x, float y, float w, float h, drawable *other)
     }
 
     return ret;
+    (void)other;
 }

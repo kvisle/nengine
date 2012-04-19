@@ -15,9 +15,9 @@ struct box {
 };
 
 struct animation {
-    int loop;
-    int next;
-    int interval;
+    unsigned int loop;
+    unsigned int next;
+    unsigned int interval;
     std::vector<int> frames;
 };
 
@@ -46,9 +46,9 @@ class sprite : public drawable {
         float qw, qh;
 
         void printInfo();
-        void setAnimation(int x);
+        void setAnimation(unsigned int x);
 
-        int frame, intcount, animation;
+        unsigned int frame, intcount, animation;
 
         int flip_x, flip_y;
 

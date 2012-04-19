@@ -35,6 +35,11 @@ drawable::update()
 int
 drawable::collidesWith(float x, float y, float w, float h, drawable *other)
 {
+    (void)x;
+    (void)y;
+    (void)w;
+    (void)h;
+    (void)other;
 
     return 0;
 }
@@ -42,5 +47,5 @@ drawable::collidesWith(float x, float y, float w, float h, drawable *other)
 void
 drawable::input(union ninput in)
 {
-
+    (void)in;
 }
