@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "camera.h"
+#include "gamestate.h"
 
 class renderer;
 class resourcemanager;
@@ -14,6 +15,7 @@ class input;
 class osd;
 class audio;
 
+
 class game {
     public:
         game();
@@ -22,14 +24,16 @@ class game {
         void render();
         int update();
 
-        int collides(float x, float y, float w, float h, drawable *me);
+        int collides(float x, float y, float w, float h, sprite *me, int bits);
         void setReload(int val);
         int getReload();
+        int drawBoxes();
 
         renderer *r;
         resourcemanager *rm;
         input *in;
         audio *a;
+		gamestate gs;
 
         camera c;
         font *f;
@@ -39,6 +43,7 @@ class game {
     private:
         std::vector<drawable*> assets;
         int updateno;
+        int boxDraw;
 
         osd *o;
 };

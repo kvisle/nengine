@@ -33,6 +33,18 @@ sprite::sprite(game *g, int x, int y, int z, std::string tex, Json::Value json)
 }
 
 void
+sprite::damage(drawable *d)
+{
+    puts("Unimplemented damage function.");
+}
+
+void
+sprite::kill()
+{
+    puts("Unimplemented kill function.");
+}
+
+void
 sprite::loadJson(std::string res)
 {
     loadJson(resource(res).getJson());
@@ -146,7 +158,8 @@ sprite::render()
                   1.0f, 1.0f, 1.0f, 1.0f,
                   flip_x, flip_y);
 
-    renderBox();
+    if ( g->drawBoxes() )
+        renderBox();
 }
 
 void
@@ -180,7 +193,7 @@ sprite::attemptMove(int *x, int *y, int bits)
             mx = 1;
             my = 0;
             ret = attemptMoveStep(&mx, &my, bits);
-            if ( ret )
+            if ( ret & BIT_SOLID )
                 return ret;
             *x -= 1;
             this->x += mx;
@@ -190,7 +203,7 @@ sprite::attemptMove(int *x, int *y, int bits)
             mx = -1;
             my = 0;
             ret = attemptMoveStep(&mx, &my, bits);
-            if ( ret )
+            if ( ret & BIT_SOLID )
                 return ret;
             *x += 1;
             this->x += mx;
@@ -200,7 +213,7 @@ sprite::attemptMove(int *x, int *y, int bits)
             mx = 0;
             my = 1;
             ret = attemptMoveStep(&mx, &my, bits);
-            if ( ret )
+            if ( ret & BIT_SOLID )
                 return ret;
             *y -= 1;
             this->x += mx;
@@ -210,13 +223,12 @@ sprite::attemptMove(int *x, int *y, int bits)
             mx = 0;
             my = -1;
             ret = attemptMoveStep(&mx, &my, bits);
-            if ( ret )
+            if ( ret & BIT_SOLID)
                 return ret;
             *y += 1;
             this->x += mx;
             this->y += my;
         }
-
     }
     return 0;
 }
@@ -232,7 +244,7 @@ sprite::attemptMoveStep(int *x, int *y, int bits)
         myb.x += this->x + *x;
         myb.y += this->y + *y;
 
-        ret |= g->collides(myb.x, myb.y, myb.w, myb.h, this);
+        ret |= g->collides(myb.x, myb.y, myb.w, myb.h, this, myb.bits);
     }
 
     if ( (ret & (BIT_SLOPE_NE|BIT_SOLID)) == (BIT_SLOPE_NE|BIT_SOLID) && (bits & BIT_SLOPE_NE) )
@@ -287,7 +299,6 @@ sprite::attemptMoveStep(int *x, int *y, int bits)
             return attemptMoveStep(x, y, 0);
         }
     }
-
     return ret;
 }
 
@@ -303,4 +314,57 @@ sprite::setAnimation(unsigned int x)
     animation = x;
     frame = 0;
 
+}
+
+int
+sprite::collidesWith(float x, float y, float w, float h, drawable *other, int bits)
+{
+    int ret = 0;
+
+    for (unsigned int i = 0; i < frames[animations[animation].frames[frame]].boxes.size(); i++)
+    {
+        struct box myb = boxes[frames[animations[animation].frames[frame]].boxes[i]];
+        myb.x += this->x;
+        myb.y += this->y;
+
+        if ( myb.x > x + w )
+            continue;
+
+        if ( myb.y > y + h )
+            continue;
+
+        if ( myb.x + myb.w < x )
+            continue;
+
+        if ( myb.y + myb.h < y )
+            continue;
+
+        if ( bits & BIT_PICKSUP && myb.bits & BIT_PICKUPABLE )
+            other->pickUp(this);
+
+        if ( bits & BIT_UNLOCKS && myb.bits & BIT_UNLOCKABLE )
+            other->unLock(this);
+
+        if ( bits & BIT_DAMAGEABLE && myb.bits & BIT_DAMAGE )
+            other->damage(this);
+
+        if ( bits & BIT_DAMAGE && myb.bits & BIT_DAMAGEABLE )
+            damage(other);
+
+        ret |= myb.bits;
+    }
+
+    return ret;
+}
+
+int
+sprite::inFrame()
+{
+    if ( x+qw > g->c.x && 
+         x < g->c.x + g->c.w &&
+         y+qh > g->c.y &&
+         y < g->c.y + g->c.h )
+            return 1;
+
+    return 0;
 }

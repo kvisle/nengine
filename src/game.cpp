@@ -16,23 +16,25 @@
 #include "resource.h"
 #include "font.h"
 #include "sprite.h"
-#include "megaman.h"
 #include "input.h"
+
+#include "gamestate.h"
+#include "bits.h"
 #include "osd.h"
 
-game::game() : c(0, 0, 480, 320)
+game::game() : c(0, 0, 480, 320), gs(0)
 {
     updateno = 0;
+    boxDraw = 0;
 
     in = new input();
     r = new renderer(480, 320);
     rm = new resourcemanager(this);
-    o = new osd(this);
     a = new audio();
-    f = new font(rm->getImage("charmap3.png"), this, 8, 8);
+    f = new font(rm->getImage("charmap2.png"), this, 8, 8);
+    o = new osd(this);
 
-    assets.push_back(new tilemap(this, "tilemap.png", "gfx.png", "gfxts1.json"));
-    assets.push_back(new megaman(this, 124*16, 95*16, 0));
+    SDL_WM_SetCaption("Nengine", NULL);
 
     std::cout << "Made game" << std::endl;
 }
@@ -51,12 +53,11 @@ game::render()
 {
     r->clear();
 
-    for (uint32_t i=0; i < assets.size(); i++)
+    switch(gs.state)
     {
-        assets[i]->render();
+	default:
+		break;
     }
-
-    o->render();
 
     r->swap();
 }
@@ -67,27 +68,40 @@ game::update()
     updateno++;
 
 #ifdef TARGET_SDL
-    if ( updateno % 60 == 0 )
+/*    if ( updateno % 60 == 0 )
     {
         char caption[128];
         sprintf(caption, "Assets: %lu", assets.size());
         SDL_WM_SetCaption(caption, NULL);
-    }
+    }*/
 #endif
 
-    for (uint32_t i=0; i < assets.size(); i++)
-    {
-        assets[i]->update();
-    }
-
-
-    this->setReload(0);
+    switch(gs.state) {
+    case 0:
+        break;
+    case 1:
+        for (uint32_t i=0; i < assets.size(); i++)
+        {
+            if ( assets[i]->removeme )
+            {
+                assets.erase(assets.begin() + i);
+                i--;
+                continue;
+            }
+            if ( assets[i]->inFrame() )
+                assets[i]->update();
+        }
+        this->setReload(0);
+        break;
+    case 2:
+        break;
+    }    
 
     return 0;
 }
 
 int
-game::collides(float x, float y, float w, float h, drawable * me)
+game::collides(float x, float y, float w, float h, sprite * me, int bits)
 {
     int ret = 0;
     for (uint32_t i=0; i < assets.size(); i++)
@@ -95,9 +109,16 @@ game::collides(float x, float y, float w, float h, drawable * me)
         if ( assets[i] == me )
             continue;
 
-        ret |= assets[i]->collidesWith(x, y, w, h, me);
+        ret |= assets[i]->collidesWith(x, y, w, h, me, bits);
 
     }
+
+    if ( ret & BIT_KILL && bits & BIT_KILLABLE )
+        me->kill();
+
+//    if ( ret & BIT_DAMAGE && bits & BIT_KILLABLE )
+//        me->damage();
+
     return ret;
 }
 
@@ -111,4 +132,10 @@ int
 game::getReload()
 {
     return reload;
+}
+
+int
+game::drawBoxes()
+{
+    return this->boxDraw;
 }

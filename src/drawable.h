@@ -15,13 +15,24 @@ class drawable {
 
         virtual void render();
         virtual void update();
-        virtual int collidesWith(float x, float y, float w, float h, drawable *other);
+        virtual int collidesWith(float x, float y, float w, float h, drawable *other, int bits);
         virtual void input(union ninput in);
+        virtual void pickUp(drawable *d);
+        virtual void unLock(drawable *d);
+        virtual void damage(drawable *d);
+        virtual void kill();
+
+        virtual int identify();
+        virtual int inFrame();
 
         game *g;
         int x, y, z;
 
         image *tex;
+
+        void remove();
+
+        int removeme;
 
     private:
         // Does this even make sense?

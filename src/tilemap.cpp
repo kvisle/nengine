@@ -180,7 +180,7 @@ tilemap::getTileBox(int *x, int *y, int *w, int *h, int tileid)
 }
 
 int
-tilemap::collidesWith(float x, float y, float w, float h, drawable *other)
+tilemap::collidesWith(float x, float y, float w, float h, drawable *other, int bits)
 {
     int ret = 0;
     int tx = x / tw;
@@ -205,6 +205,12 @@ tilemap::collidesWith(float x, float y, float w, float h, drawable *other)
             if ( bits & BIT_SOLID )
                 ret |= BIT_SOLID;
 
+            if ( bits & BIT_DAMAGE )
+                ret |= BIT_DAMAGE;
+
+            if ( bits & BIT_KILL )
+                ret |= BIT_KILL;
+
             if ( (bits & BIT_SLOPE_NE) && checkSlope(tbx, tby, tbw, tbh, BIT_SLOPE_NE) ) 
                 ret |= (BIT_SOLID|BIT_SLOPE_NE);
 
@@ -222,4 +228,5 @@ tilemap::collidesWith(float x, float y, float w, float h, drawable *other)
 
     return ret;
     (void)other;
+    (void)bits;
 }

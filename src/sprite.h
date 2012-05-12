@@ -37,6 +37,12 @@ class sprite : public drawable {
         virtual void renderBox();
         virtual void update();
 
+        virtual int collidesWith(float x, float y, float w, float h, drawable *other, int bits);
+        virtual int inFrame();
+
+        virtual void kill();
+        virtual void damage(drawable *d);
+
         int attemptMove(int *x, int *y, int bits);
         int attemptMoveStep(int *x, int *y, int bits);
 

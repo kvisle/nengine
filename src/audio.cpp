@@ -43,7 +43,7 @@ audio::~audio()
 int
 audio::play(sound *s, int type)
 {
-    printf("audio::play(%d)\n", type);
+#ifdef __USE_OPENAL__
     int i;
     ALint val;
 
@@ -72,13 +72,13 @@ audio::play(sound *s, int type)
         playSound(s, i);
         return i;
     }
+#endif
     return -1;
 }
 
 void 
 audio::playSound(sound *s, int channel)
 {
-    printf("playSound(%x, %d) - buffer: %d\n", s, channel, s->buffer);
 #ifdef __USE_OPENAL__
     alSourcef(channels[channel], AL_GAIN, 0.2f);
     alSourcei(channels[channel], AL_BUFFER, s->buffer);
@@ -86,18 +86,14 @@ audio::playSound(sound *s, int channel)
     alSourcePlay(channels[channel]);
     if ( alGetError() != AL_NO_ERROR)
         printf("load failed wat : %d\n", alGetError());
-
-    puts("Playing loop");
 #endif
 }
 
 void 
 audio::stopSound(int channel)
 {
-    puts("stopSound()");
 #ifdef __USE_OPENAL__
     alSourceStop(channel);
-    puts("Stopping loop");
 #endif
 }
 

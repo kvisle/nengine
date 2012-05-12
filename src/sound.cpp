@@ -1,3 +1,4 @@
+#include <cstdio>
 #include "game.h"
 #include "sound.h"
 #include "resource.h"
@@ -64,7 +65,5 @@ sound::loadWav(const char * buffer, int length)
 void
 sound::play()
 {
-    printf("this->buffer: %d\n", this->buffer);
-
     g->a->play(this, SOUND_TYPE_SFX);
 }

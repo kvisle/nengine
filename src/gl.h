@@ -20,6 +20,10 @@
 //  #include <GLES2/gl2ext.h>
 //  #include <ppapi/c/ppb_opengles.h>
 
+ #elif EMSCRIPTEN
+
+  #include <GLES2/gl2.h>
+
  #else
 
   #define USE_GLEW

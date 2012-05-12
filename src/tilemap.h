@@ -23,7 +23,7 @@ class tilemap : public drawable {
 
         void loadMap(std::string imgr);
 
-        virtual int collidesWith(float x, float y, float w, float h, drawable *other);
+        virtual int collidesWith(float x, float y, float w, float h, drawable *other, int bits);
 
         int w, h;
         int tw, th;
