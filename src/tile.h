@@ -1,6 +1,8 @@
 #ifndef __TILE_H__
 #define __TILE_H__
 
+#include <json/json.h>
+
 #include "drawable.h"
 
 class tile : public drawable {
@@ -11,7 +13,17 @@ class tile : public drawable {
         void render(float x, float y, float w, float h);
         void update();
 
+        void setCR(int cr);
         void setIndex(int x);
+        void addFrame(int id);
+        void clearFrames(void);
+        int getFrames();
+        int getFrame(int id);
+        int getInterval();
+        void setInterval(int v);
+
+        Json::Value asJSON();
+
         int index;
         int bits;
 

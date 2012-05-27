@@ -7,6 +7,7 @@ camera::camera(int x, int y, int w, int h)
     this->y = y;
     this->w = w;
     this->h = h;
+    saveCamera();
 }
 
 
@@ -39,4 +40,22 @@ camera::keepInFrame(sprite *s, int margx, int margy)
     if ( s->y + s->qh > this->y + this->h - margy )
         this->y = s->y + s->qh + margy - this->h;
 
+}
+
+void
+camera::saveCamera()
+{
+    _x = x;
+    _y = y;
+    _w = w;
+    _h = h;
+}
+
+void
+camera::resetCamera()
+{
+    x = _x;
+    y = _y;
+    w = _w;
+    h = _h;
 }

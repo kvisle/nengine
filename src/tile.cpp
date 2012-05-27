@@ -30,6 +30,12 @@ tile::~tile()
 }
 
 void
+tile::setCR(int cr)
+{
+    tw = th = cr;
+}
+
+void
 tile::setIndex(int x)
 {
     index = x;
@@ -46,7 +52,6 @@ tile::render(float x, float y, float w, float h)
 
     if ( ind < 0 )
         return;
-//    printf("Rendering at: %2.2f, %2.2f, %2.2f, %2.2f\n", sx, sy, sw, sh);
 
     g->r->addQuad(tex->getTexture(), &(g->c),
                   x, y, w, h,
@@ -62,3 +67,76 @@ tile::update()
             frame = 0;
     }
 }
+
+Json::Value
+tile::asJSON()
+{
+    Json::Value me;
+
+    me["x"] = index;
+
+    if ( bits )
+        me["b"] = bits;
+
+    if ( interval != 10 )
+        me["i"] = interval;
+
+    for (int i = 0; i < frames_n; i++)
+    {
+        me["frames"][i] = frames[i];
+    }
+
+    return me;
+}
+
+void
+tile::addFrame(int id)
+{
+    if ( frames_n == 64 )
+        return;
+    frames[frames_n] = id;
+    frames_n++;
+}
+
+void
+tile::clearFrames(void)
+{
+    frame = 0;
+    frames_n = 0;
+}
+
+int
+tile::getFrames()
+{
+    return frames_n;
+}
+
+int
+tile::getFrame(int id)
+{
+    if ( id < 0 )
+        return 0;
+
+    if ( frames_n <= id )
+        return 0;
+
+    return frames[id];
+}
+
+int 
+tile::getInterval()
+{
+    return interval;
+}
+
+void
+tile::setInterval(int v)
+{
+    if ( v == 0 )
+        return;
+    if ( v > 300 )
+        return;
+
+    interval = v;
+}
+

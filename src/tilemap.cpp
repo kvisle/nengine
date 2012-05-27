@@ -7,11 +7,49 @@
 #include "game.h"
 #include "image.h"
 #include "bits.h"
+#include "resource.h"
 
 tilemap::tilemap(game *g, std::string t, Json::Value json)
        : drawable(g, 0, 0, 0, t)
 {
-    int i; 
+    loadMap(json, t);
+    grid = 0;
+}
+
+tilemap::tilemap(game *g, std::string imgr, std::string t, std::string tileset)
+       : drawable(g, 0, 0, 0, t)
+{
+    ts = g->rm->getTileset(tileset, t);
+    imgrname = imgr;
+    grid = 0;
+
+
+    loadMap(imgr);
+}
+
+tilemap::tilemap(game *g, std::string mapfile, tileset *ts)
+       : drawable(g, 0, 0, 0, ts->getTexName())
+{
+    this->ts = ts;
+    grid = 0;
+
+    loadMap(resource(mapfile).getJson(), "");
+}
+
+tilemap::tilemap(game *g, tileset *ts)
+       : drawable(g, 0, 0, 0, ts->getTexName())
+{
+    this->ts = ts;
+    w = h = 8;
+    tw = th = 16;
+    grid = 0;
+    map.insert(map.begin(), w*h, 0);
+}
+
+void
+tilemap::loadMap(Json::Value json, std::string gfx)
+{
+    int i;
 
     w = json.get("width", 0).asInt();
     h = json.get("height", 0).asInt();
@@ -19,7 +57,8 @@ tilemap::tilemap(game *g, std::string t, Json::Value json)
     tw = json.get("twidth", 0).asInt();
     th = json.get("theight", 0).asInt();
 
-    ts = g->rm->getTileset(json.get("tileset", "tileset.json").asString(), t);
+    if ( gfx.size() > 0 )
+        ts = g->rm->getTileset(json.get("tileset", "tileset.json").asString(), gfx);
 
     for ( i = 0 ; json["tilemap"][i].isInt() ;i++ )
     {
@@ -30,17 +69,6 @@ tilemap::tilemap(game *g, std::string t, Json::Value json)
     {
         std::cout << "Tilemap is invalid, dimensions incorrect: " << w << "x" << h << " should be " << w * h << " but is " << map.size() << std::endl;
     }
-
-}
-
-tilemap::tilemap(game *g, std::string imgr, std::string t, std::string tileset)
-       : drawable(g, 0, 0, 0, t)
-{
-    ts = g->rm->getTileset(tileset, t);
-    imgrname = imgr;
-
-
-    loadMap(imgr);
 }
 
 void
@@ -116,10 +144,18 @@ tilemap::render()
 
     for (int xp = tx; xp <= lx ; xp++)
     {
+        if ( xp < 0 || xp >= w )
+            continue;
+
         for (int yp = ty; yp <= ly ; yp++)
         {
+            if ( yp < 0 || yp >= h )
+                continue;
+
             int i = yp*w+xp;
-            ts->getIndex(map[i])->render((i % w) * tw, (i / w) * th, tw, th);
+            int rw = ( grid ? tw - 1 : tw );
+            int rh = ( grid ? th - 1 : th );
+            ts->getIndex(map[i])->render((i % w) * tw, (i / w) * th, rw, rh);
         }
     }
 
@@ -229,4 +265,165 @@ tilemap::collidesWith(float x, float y, float w, float h, drawable *other, int b
     return ret;
     (void)other;
     (void)bits;
+}
+
+int
+tilemap::getTWH()
+{
+    return tw;
+}
+
+void
+tilemap::setTWH(int wh)
+{
+    tw = th = wh;
+}
+
+int
+tilemap::getTileAt(int x, int y)
+{
+    int mx = (x + g->c.x) / tw;
+    int my = (y + g->c.y) / th;
+
+    if ( mx >= w )
+        return -1;
+
+    if ( my >= h )
+        return -1;
+
+    return (my * w) + mx;
+}
+
+void
+tilemap::setTileAt(unsigned int index, int id)
+{
+    if ( index >= map.size() )
+        return;
+
+    map[index] = id;
+}
+
+void
+tilemap::addTopRows(int n)
+{
+    h += n;
+    map.insert(map.begin(), n * w, 0);
+}
+
+void
+tilemap::addBotRows(int n)
+{
+    h += n;
+    map.insert(map.end(), n * w, 0);
+}
+
+void
+tilemap::addRightCols(int n)
+{
+    while(n--)
+    {
+        for (int i = w * h ; i > 0 ; i -= w)
+        {
+            map.insert(map.begin()+i, 1, 0);
+        }
+        w += 1;
+    }
+}
+
+void
+tilemap::addLeftCols(int n)
+{
+    while(n--)
+    {
+        for (int i = w * (h-1) ; i > -1 ; i -= w)
+        {
+            map.insert(map.begin()+i, 1, 0);
+        }
+        w += 1;
+    }
+}
+
+void
+tilemap::delTopRows(int n)
+{
+    h -= n;
+    map.erase(map.begin(), map.begin() + (n*w));
+}
+
+void
+tilemap::delBotRows(int n)
+{
+    h -= n;
+    map.erase(map.end() - (n*w), map.end());
+}
+
+void
+tilemap::delRightCols(int n)
+{
+    while(n--)
+    {
+        for (int i = (w * h) - 1 ; i > 0 ; i -= w)
+        {
+            map.erase(map.begin()+i);
+        }
+        w -= 1;
+    }
+}
+
+void
+tilemap::delLeftCols(int n)
+{
+    while(n--)
+    {
+        for (int i = w * (h-1) ; i > -1 ; i -= w)
+        {
+            map.erase(map.begin()+i);
+        }
+        w -= 1;
+    }
+}
+
+std::string
+tilemap::asJSON()
+{
+//    Json::StyledWriter writer;
+    Json::FastWriter writer;
+    Json::Value me;
+
+    me["width"] = w;
+    me["height"] = h;
+
+    me["twidth"] = tw;
+    me["theight"] = th;
+
+    for (int i = 0; i < map.size(); i++)
+    {
+        me["tilemap"][i] = map[i];
+    }
+    return writer.write(me);
+
+}
+
+void
+tilemap::enableGrid()
+{
+    grid = 1;
+}
+
+void
+tilemap::disableGrid()
+{
+    grid = 0;
+}
+
+int
+tilemap::getW()
+{
+    return w;
+}
+
+int
+tilemap::getH()
+{
+    return h;
 }
