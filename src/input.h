@@ -19,12 +19,13 @@ struct nkey {
 
 struct nmousemove {
     int type;
-    int x, y;
+    int x, y, rx, ry;
 };
 
 struct nmousebutton {
     int type;
     int button;
+	int x, y;
 };
 
 union ninput{

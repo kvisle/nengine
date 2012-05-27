@@ -36,6 +36,7 @@ void
 sprite::damage(drawable *d)
 {
     puts("Unimplemented damage function.");
+    (void)d;
 }
 
 void

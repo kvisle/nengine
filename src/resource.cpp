@@ -35,6 +35,12 @@ is_file_in_tar( struct tar *tar, const char *name, char **start, unsigned int *l
 resource::resource(std::string name)
 {
     std::string filename = "assets/" + name;
+
+    if ( name[0] == '/' )
+        filename = name;
+    if ( name[1] == ':' )
+        filename = name;
+
     length = 0;
     buffer = NULL;
 

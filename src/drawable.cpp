@@ -57,19 +57,19 @@ drawable::input(union ninput in)
 void
 drawable::pickUp(drawable *d)
 {
-
+    (void)d;
 }
 
 void
 drawable::unLock(drawable *d)
 {
-
+    (void)d;
 }
 
 void
 drawable::damage(drawable *d)
 {
-
+    (void)d;
 }
 
 void
